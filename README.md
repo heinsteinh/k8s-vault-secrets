@@ -1,7 +1,6 @@
 ## KIND local environment
 
 <img src="./KIND-diagram.png?raw=true" width="800">
-
 KIND Source: https://github.com/kubernetes-sigs/kind (https://github.com/kubernetes-sigs/kind/tree/main/images/base)
 
 ### Install KIND 
@@ -104,6 +103,8 @@ Node                                    Address                        State    
 
 ```
 ### App: Using the Agent Injector 
+
+<img src="./inject_vault.jpeg?raw=true" width="800">
 
 ```
 $ kubectl exec -n vault -it vault-0 -- /bin/sh
