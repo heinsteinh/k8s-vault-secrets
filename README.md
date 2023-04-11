@@ -103,7 +103,7 @@ Node                                    Address                        State    
 63983551-e6f8-7ebe-fc60-0cdc66469b39    vault-2.vault-internal:8201    follower    true
 
 ```
-### App 
+### App: Using the Agent Injector 
 
 ```
 $ kubectl exec -n vault -it vault-0 -- /bin/sh
@@ -143,7 +143,7 @@ Success! Data written to: auth/kubernetes/role/internal-app
 
 $ kubectl create sa internal-app
 serviceaccount/internal-app created
-davar@carbon:~/Downloads/ArgoCD-GitOps-playground/KIND$ kubectl apply -f internal-app-deploy.yaml 
+$ kubectl apply -f internal-app-deploy.yaml 
 deployment.apps/orgchart created
 
 $ kubectl exec \
