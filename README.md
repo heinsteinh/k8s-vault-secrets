@@ -83,6 +83,10 @@ vault-1                                 1/1     Running   0          13m   192.1
 vault-2                                 1/1     Running   0          13m   192.168.32.71     gitops-worker2   <none>           <none>
 vault-agent-injector-59b9c84fd8-vkhsm   1/1     Running   0          15m   192.168.183.68    gitops-worker    <none>           <none>
 
+Note: To confirm that the highly available Vault cluster is ready, login to the
+vault-0 instance using the Initial Root Token provided by the vault
+operator init command
+
 $ kubectl -n vault exec -it vault-0 -- vault login
 Token (will be hidden): 
 Success! You are now authenticated. The token information displayed below
