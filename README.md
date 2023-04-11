@@ -1,7 +1,7 @@
 ## k8s:KIND local environment
 
 <img src="./KIND-diagram.png?raw=true" width="800">
-Ref: [KIND Source](https://github.com/kubernetes-sigs/kind/tree/main/images/base)
+Ref: KIND Source [https://github.com/kubernetes-sigs/kind/tree/main/images/base](https://github.com/kubernetes-sigs/kind))
 
 ### Install KIND 
 ```
