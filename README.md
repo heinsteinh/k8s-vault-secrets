@@ -11,7 +11,6 @@ KIND Source: https://github.com/kubernetes-sigs/kind (https://github.com/kuberne
 ### Instal KIND 
 
 $ curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind (Note: k8s v1.25.3)
-```
 $ cd KIND/
 ###Create k8s Cluster and get credentials
 $ kind create cluster --name gitops --config cluster-config.yaml
