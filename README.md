@@ -22,7 +22,7 @@ $ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 
-### Install Vault
+### Vault
 
 ```
 $ helm repo add hashicorp https://helm.releases.hashicorp.com
@@ -58,6 +58,12 @@ reconstruct the root key, Vault will remain permanently sealed!
 
 It is possible to generate new unseal keys, provided you have a quorum of
 existing unseal keys shares. See "vault operator rekey" for more information.
+
+Note: When Vault is initialized, it will be put into sealed mode, meaning that the
+that it knows how to access the storage layer, but cannot decrypt any of the
+content. When Vault is in a sealed state, it is akin to a bank vault where the
+assets are secure, but no actions can take place. To be able to interact with
+Vault, it must be unsealed.
 
 $ kubectl -n vault exec -it vault-0 -- vault operator unseal
 $ kubectl -n vault exec -it vault-0 -- vault operator unseal
