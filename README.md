@@ -7,7 +7,7 @@ Ref: KIND Source [https://github.com/kubernetes-sigs/kind/tree/main/images/base]
 ```
 ### Install docker, kubectl, etc.
 
-### Instal KIND 
+### KIND 
 
 $ curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind (Note: k8s v1.25.3)
 $ cd KIND/
