@@ -5,7 +5,7 @@ Ref: KIND Source [https://github.com/kubernetes-sigs/kind/tree/main/images/base]
 
 ### KIND 
 ```
-### Install docker, kubectl, etc.
+### Install docker, kubectl, helm.
 
 ### KIND 
 
