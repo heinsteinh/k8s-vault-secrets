@@ -181,9 +181,5 @@ postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
 
 ```
 $ kind delete cluster --name=gitops
-
-$ kind delete cluster --name=gitops
-Deleting cluster "devsecops" ...
-[1]+  Killed                  linkerd viz dashboard
 ```
 
