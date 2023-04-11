@@ -147,6 +147,19 @@ serviceaccount/internal-app created
 $ kubectl apply -f internal-app-deploy.yaml 
 deployment.apps/orgchart created
 
+$ kubectl get po
+NAME                        READY   STATUS    RESTARTS   AGE
+orgchart-67fbfdcc7c-sqc2g   2/2     Running   0          77m
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g 
+Defaulted container "orgchart" out of: orgchart, vault-agent, vault-agent-init (init)
+Listening on port 8000...
+
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c vault-agent-init
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c vault-agent
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c orgchart
+
+
 $ kubectl exec \
 >   $(kubectl get pod -l app=orgchart -o jsonpath="{.items[0].metadata.name}") \
 >   --container orgchart -- cat /vault/secrets/database-config.txt
