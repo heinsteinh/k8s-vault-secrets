@@ -174,6 +174,8 @@ $ kubectl exec \
 >   $(kubectl get pod -l app=orgchart -o jsonpath="{.items[0].metadata.name}") \
 >   --container orgchart -- cat /vault/secrets/database-config.txt
 postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
+
+Note: Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. An init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
 ```
 
 
