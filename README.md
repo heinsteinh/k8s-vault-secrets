@@ -112,6 +112,14 @@ Node                                    Address                        State    
 63983551-e6f8-7ebe-fc60-0cdc66469b39    vault-2.vault-internal:8201    follower    true
 
 ```
+
+### App: Using a manual init container to load secrets
+
+<img src="./init-vault.jpeg?raw=true" width="800">
+
+
+
+
 ### App: Using the Agent Injector 
 
 <img src="./inject_vault.jpeg?raw=true" width="800">
