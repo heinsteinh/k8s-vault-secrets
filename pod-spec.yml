@@ -29,7 +29,7 @@ spec:
           mountPath: /home/vault
         - name: shared-data
           mountPath: /etc/secrets
-      # Assumes Vault is running on a Vagrant VM with forwarded port on localhost:8282 as configured in VagrantFile.
+      # If Vault is running on a Vagrant VM with forwarded port on localhost:8282 as configured in VagrantFile. "${VAULT_SERVER_ADDR}"
       # To access services in two different namespaces you can use url like this: HTTP://<your-service-name>.<namespace-with-that-service>.svc.cluster.local
       env:
         - name: VAULT_ADDR
