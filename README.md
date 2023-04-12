@@ -180,7 +180,7 @@ After exiting our exec session, we’ll need to create the Service Account our V
 $ kubectl create sa internal-app
 serviceaccount/internal-app created
 ```
-### Demo1: App: Using a manual init container to load secrets
+### Demo1: App -> Using a manual init container to load secrets
 
 <img src="./init-vault.jpeg?raw=true" width="800">
 
@@ -199,7 +199,7 @@ $ kubectl exec vault-agent-example --container nginx-container -- cat /usr/share
 
 ```
 
-### Demo2: App: Using the Agent Injector to make our life easier
+### Demo2: App -> Using the Agent Injector to make our life easier
 
 <img src="./inject_vault.jpeg?raw=true" width="800">
 
