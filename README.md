@@ -3,11 +3,11 @@
 <img src="./KIND-diagram.png?raw=true" width="800">
 Ref: KIND Source [https://github.com/kubernetes-sigs/kind/tree/main/images/base](https://github.com/kubernetes-sigs/kind))
 
-### KIND 
-```
-### Install docker, kubectl, helm.
-
 ### KIND install/setup
+```
+### Pre: Install docker, kubectl, helm.
+
+### KIND environment setup
 
 $ curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind (Note: k8s v1.25.3)
 $ cd KIND/
