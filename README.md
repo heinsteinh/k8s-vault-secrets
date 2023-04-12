@@ -119,6 +119,8 @@ Node                                    Address                        State    
 
 $ kubectl exec -n vault -it vault-0 -- /bin/sh
 
+### enable Vault’s Key Value v2 Secrets Engine, which will allow us to create and store a simple key-value secret, like so:
+
 / $ vault secrets enable -path=internal kv-v2
 Success! Enabled the kv-v2 secrets engine at: internal/
 / $ vault kv put internal/database/config username="db-readonly-username" password="db-secret-password"
@@ -133,24 +135,38 @@ custom_metadata    <nil>
 deletion_time      n/a
 destroyed          false
 version            1
+
+### Next, we’ll need to enable Vault’s built-in K8s auth, so that it will be able to authenticate with Vault using a Kubernetes Service Account Token that we can get from our running cluster, like so:
+
 / $ vault auth enable kubernetes
 Success! Enabled kubernetes auth method at: kubernetes/
+
+### Then we’ll need to add the K8s host IP to the Vault auth config:
+
 / $ vault write auth/kubernetes/config \
 >   kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443"
 Success! Data written to: auth/kubernetes/config
+
+### Next, we’ll need to create a Vault policy called internal-app that will allow read access to our defined path within Vault:
+
 / $ vault policy write internal-app - <<EOF
 > path "internal/data/database/config" {
 > capabilities = ["read"]
 > }
 > EOF
 Success! Uploaded policy: internal-app
+
+### Then create a Vault role that includes references to the Vault role we just created, the K8s service account we’ll create in the next step, and the K8s namespace it will have access to within our Kubernetes cluster, like so:
+
 / $ vault write auth/kubernetes/role/internal-app \
 >   bound_service_account_names=internal-app \
 >   bound_service_account_namespaces=default \
 >   policies=internal-app \
 >   ttl=24h
 Success! Data written to: auth/kubernetes/role/internal-app
-/ $ 
+/ $ exit
+
+After exiting our exec session, we’ll need to create the Service Account our Vault role refers to above in kind – also called internal-app:
 
 $ kubectl create sa internal-app
 serviceaccount/internal-app created
@@ -160,8 +176,6 @@ serviceaccount/internal-app created
 <img src="./init-vault.jpeg?raw=true" width="800">
 
 ```
-$ kubectl create sa internal-app
-serviceaccount/internal-app created
 $ kubectl create configmap example-vault-agent-config --from-file=vault-agent-config.hcl
 $ kubectl apply -f  pod-spec.yml
 $ kubectl logs vault-agent-example -c  vault-agent-auth
