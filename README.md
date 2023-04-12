@@ -122,7 +122,7 @@ $ kubectl create configmap example-vault-agent-config --from-file=vault-agent-co
 $ kubectl apply -f  pod-spec.yml
 $ kubectl logs vault-agent-example -c  vault-agent-auth
 $ kubectl logs vault-agent-example -c  nginx-container
-D$ kubectl exec vault-agent-example --container nginx-container -- cat /usr/share/nginx/html/index.html
+$ kubectl exec vault-agent-example --container nginx-container -- cat /usr/share/nginx/html/index.html
   <html>
   <body>
   <p>DB Connection String:</p>postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
