@@ -113,26 +113,7 @@ Node                                    Address                        State    
 
 ```
 
-### App: Using a manual init container to load secrets
 
-<img src="./init-vault.jpeg?raw=true" width="800">
-
-```
-$ kubectl create sa internal-app
-serviceaccount/internal-app created
-$ kubectl create configmap example-vault-agent-config --from-file=vault-agent-config.hcl
-$ kubectl apply -f  pod-spec.yml
-$ kubectl logs vault-agent-example -c  vault-agent-auth
-$ kubectl logs vault-agent-example -c  nginx-container
-$ kubectl exec vault-agent-example --container nginx-container -- cat /usr/share/nginx/html/index.html
-  <html>
-  <body>
-  <p>DB Connection String:</p>postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
-  
-  </body>
-  </html>
-
-```
 
 ### App: Using the Agent Injector to make our life easier
 
@@ -199,7 +180,26 @@ postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
 
 Note: Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. An init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
 ```
+### App: Using a manual init container to load secrets
 
+<img src="./init-vault.jpeg?raw=true" width="800">
+
+```
+$ kubectl create sa internal-app
+serviceaccount/internal-app created
+$ kubectl create configmap example-vault-agent-config --from-file=vault-agent-config.hcl
+$ kubectl apply -f  pod-spec.yml
+$ kubectl logs vault-agent-example -c  vault-agent-auth
+$ kubectl logs vault-agent-example -c  nginx-container
+$ kubectl exec vault-agent-example --container nginx-container -- cat /usr/share/nginx/html/index.html
+  <html>
+  <body>
+  <p>DB Connection String:</p>postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
+  
+  </body>
+  </html>
+
+```
 
 ### Clean environment
 
