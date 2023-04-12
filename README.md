@@ -118,6 +118,8 @@ Node                                    Address                        State    
 <img src="./init-vault.jpeg?raw=true" width="800">
 
 ```
+$ kubectl create sa internal-app
+serviceaccount/internal-app created
 $ kubectl create configmap example-vault-agent-config --from-file=vault-agent-config.hcl
 $ kubectl apply -f  pod-spec.yml
 $ kubectl logs vault-agent-example -c  vault-agent-auth
