@@ -216,9 +216,9 @@ $ kubectl exec \
 >   --container orgchart -- cat /vault/secrets/database-config.txt
 postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
 
-Note: Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. An init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
-```
 
+```
+Note: VVault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. Above, we looked at two ways to do this – manually and in an automated fashion. In both cases, an init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
 
 ### Clean environment
 
