@@ -117,10 +117,22 @@ Node                                    Address                        State    
 
 <img src="./init-vault.jpeg?raw=true" width="800">
 
+```
+$ kubectl create configmap example-vault-agent-config --from-file=vault-agent-config.hcl
+$ kubectl apply -f  pod-spec.yml
+$ kubectl logs vault-agent-example -c  vault-agent-auth
+$ kubectl logs vault-agent-example -c  nginx-container
+D$ kubectl exec vault-agent-example --container nginx-container -- cat /usr/share/nginx/html/index.html
+  <html>
+  <body>
+  <p>DB Connection String:</p>postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
+  
+  </body>
+  </html>
 
+```
 
-
-### App: Using the Agent Injector 
+### App: Using the Agent Injector to make our life easier
 
 <img src="./inject_vault.jpeg?raw=true" width="800">
 
