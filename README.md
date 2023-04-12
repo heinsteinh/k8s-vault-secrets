@@ -66,7 +66,12 @@ Note: When Vault is initialized, it will be put into sealed mode, meaning that t
 that it knows how to access the storage layer, but cannot decrypt any of the
 content. When Vault is in a sealed state, it is akin to a bank vault where the
 assets are secure, but no actions can take place. To be able to interact with
-Vault, it must be unsealed.
+Vault, it must be unsealed. When vault was initialized, five (5) unsealed keys were provided representing
+the shards that will be used to construct the combined key. By default, three
+(3) keys are needed to reconstruct the combined key. Let’s begin the process
+of unsealing the Vault for the vault-0 instance. Once these steps have been completed on the vault-0 instance, perform the
+vault operator join and vault operator unseal commands on the
+vault-1 & vault-2 instance.
 
 $ kubectl -n vault exec -it vault-0 -- vault operator unseal
 $ kubectl -n vault exec -it vault-0 -- vault operator unseal
