@@ -7,7 +7,7 @@ Ref: KIND Source [https://github.com/kubernetes-sigs/kind/tree/main/images/base]
 ```
 ### Install docker, kubectl, helm.
 
-### KIND 
+### KIND install/setup
 
 $ curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind (Note: k8s v1.25.3)
 $ cd KIND/
@@ -22,7 +22,7 @@ $ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 
-### Vault
+### Vault install
 
 ```
 $ helm repo add hashicorp https://helm.releases.hashicorp.com
@@ -112,14 +112,11 @@ Node                                    Address                        State    
 63983551-e6f8-7ebe-fc60-0cdc66469b39    vault-2.vault-internal:8201    follower    true
 
 ```
-
-
-
-### App: Using the Agent Injector to make our life easier
-
-<img src="./inject_vault.jpeg?raw=true" width="800">
+### Vault from the command line 
 
 ```
+### Next, we’ll need to exec into the Pod running Vault in order to configure it and add our secrets, like so:
+
 $ kubectl exec -n vault -it vault-0 -- /bin/sh
 
 / $ vault secrets enable -path=internal kv-v2
@@ -157,28 +154,6 @@ Success! Data written to: auth/kubernetes/role/internal-app
 
 $ kubectl create sa internal-app
 serviceaccount/internal-app created
-$ kubectl apply -f internal-app-deploy.yaml 
-deployment.apps/orgchart created
-
-$ kubectl get po
-NAME                        READY   STATUS    RESTARTS   AGE
-orgchart-67fbfdcc7c-sqc2g   2/2     Running   0          77m
-$ kubectl logs orgchart-67fbfdcc7c-sqc2g 
-Defaulted container "orgchart" out of: orgchart, vault-agent, vault-agent-init (init)
-Listening on port 8000...
-
-$ kubectl logs orgchart-67fbfdcc7c-sqc2g
-$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c vault-agent-init
-$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c vault-agent
-$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c orgchart
-
-
-$ kubectl exec \
->   $(kubectl get pod -l app=orgchart -o jsonpath="{.items[0].metadata.name}") \
->   --container orgchart -- cat /vault/secrets/database-config.txt
-postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
-
-Note: Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. An init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
 ```
 ### App: Using a manual init container to load secrets
 
@@ -200,6 +175,36 @@ $ kubectl exec vault-agent-example --container nginx-container -- cat /usr/share
   </html>
 
 ```
+
+### App: Using the Agent Injector to make our life easier
+
+<img src="./inject_vault.jpeg?raw=true" width="800">
+
+```
+
+$ kubectl apply -f internal-app-deploy.yaml 
+deployment.apps/orgchart created
+
+$ kubectl get po
+NAME                        READY   STATUS    RESTARTS   AGE
+orgchart-67fbfdcc7c-sqc2g   2/2     Running   0          77m
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g 
+Defaulted container "orgchart" out of: orgchart, vault-agent, vault-agent-init (init)
+Listening on port 8000...
+
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c vault-agent-init
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c vault-agent
+$ kubectl logs orgchart-67fbfdcc7c-sqc2g -c orgchart
+
+$ kubectl exec \
+>   $(kubectl get pod -l app=orgchart -o jsonpath="{.items[0].metadata.name}") \
+>   --container orgchart -- cat /vault/secrets/database-config.txt
+postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
+
+Note: Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. An init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
+```
+
 
 ### Clean environment
 
