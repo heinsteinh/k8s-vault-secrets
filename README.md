@@ -227,6 +227,185 @@ postgresql://db-readonly-username:db-secret-password@postgres:5432/wizard
 
 
 ```
+
+### Demo3: ESO (External Secret Operator)
+
+<img src="./external-secrets/kubernetes-external-secrets-1.png?raw=true" width="800">
+
+```
+### Install/Setup Vault server
+# curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+# apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com focal main"
+# apt-get update && apt-get install vault
+# cat /etc/vault.d/vault.hcl 
+# Full configuration options can be found at https://www.vaultproject.io/docs/configuration
+
+ui = true
+
+#mlock = true
+#disable_mlock = true
+
+storage "file" {
+  path = "/opt/vault/data"
+}
+
+#storage "consul" {
+#  address = "127.0.0.1:8500"
+#  path    = "vault"
+#}
+
+# HTTP listener
+#listener "tcp" {
+#  address = "0.0.0.0:8200"
+#  tls_disable = 1
+#}
+
+# HTTPS listener
+listener "tcp" {
+  address       = "0.0.0.0:8200"
+  tls_disable = 1
+  tls_cert_file = "/opt/vault/tls/tls.crt"
+  tls_key_file  = "/opt/vault/tls/tls.key"
+}
+
+# Enterprise license_path
+# This will be required for enterprise as of v1.8
+#license_path = "/etc/vault.d/vault.hclic"
+
+# Example AWS KMS auto unseal
+#seal "awskms" {
+#  region = "us-east-1"
+#  kms_key_id = "REPLACE-ME"
+#}
+
+# Example HSM auto unseal
+#seal "pkcs11" {
+#  lib            = "/usr/vault/lib/libCryptoki2_64.so"
+#  slot           = "0"
+#  pin            = "AAAA-BBBB-CCCC-DDDD"
+#  key_label      = "vault-hsm-key"
+#  hmac_key_label = "vault-hsm-hmac-key"
+#}
+
+
+# systemctl start vault
+
+$ export VAULT_SKIP_VERIFY=true
+$ export VAULT_TOKEN=hvs.mSX4zcy6M7suKKnnSguIg5j6
+$ export VAULT_ADDR=http://192.168.1.99:8200
+$ vault login 
+
+$ vault operator init
+Unseal Key 1: b8P+huX0Vg8pEJeyJl+oeDPyhpy6QfhXsvMx6rPFHKaT
+Unseal Key 2: fYAydRBmZIFO4V/QXe4YBZ6ow3L2MqK6tbB+SGBBA1Px
+Unseal Key 3: QggzBeKmJJAU7vignPA9emKFppD7Sov8VWUc8g7kytr3
+Unseal Key 4: SRTc/JCxVZ9M9jYwTOrAHhbM6ehHtpQ9WU8/rITfemXI
+Unseal Key 5: B24sVrIpnaea2FJEB4NISisNtTYUYoi1S5MFJpmL5W0W
+
+Initial Root Token: hvs.mSX4zcy6M7suKKnnSguIg5j6
+
+### Unseal Vault (We need to use three of these Unseal Keys to unseal Vault)
+$ vault operator unseal
+$ vault operator unseal
+$ vault operator unseal
+
+### Create secrets
+$ vault login
+$ vault secrets enable -path=db kv
+$ vault write db/credentials DB_USER="davar" DB_PASSWORD="qwerty123"
+Success! Data written to: db/credentials
+$ vault secrets list -detailed
+$ vault kv get -field=DB_PASSWORD db/credentials
+
+
+### K8s 
+$ cd ./external-secrets
+$ helm install external-secrets     external-secrets/external-secrets     -n external-secrets     --create-namespace     --set installCRDs=true
+$ kubectl create secret generic vault-token --from-literal='token=hvs.mSX4zcy6M7suKKnnSguIg5j6'
+$ kubectl apply -f secret-store.yaml
+$ kubectl apply -f external-secret-db.yaml
+$ kubectl get ExternalSecret db-credentials
+NAME             STORE           REFRESH INTERVAL   STATUS         READY
+db-credentials   vault-backend   15s                SecretSynced   True
+$ kubectl get ExternalSecret db-credentials -o yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"external-secrets.io/v1beta1","kind":"ExternalSecret","metadata":{"annotations":{},"name":"db-credentials","namespace":"default"},"spec":{"data":[{"remoteRef":{"key":"db/credentials","property":"DB_USER"},"secretKey":"username"},{"remoteRef":{"key":"db/credentials","property":"DB_PASSWORD"},"secretKey":"password"}],"refreshInterval":"15s","secretStoreRef":{"kind":"ClusterSecretStore","name":"vault-backend"},"target":{"creationPolicy":"Owner","name":"db-credentials-keys"}}}
+  creationTimestamp: "2023-05-28T07:12:02Z"
+  generation: 1
+  name: db-credentials
+  namespace: default
+  resourceVersion: "4460"
+  uid: 2bae243b-c537-426d-9018-f10119dacd73
+spec:
+  data:
+  - remoteRef:
+      conversionStrategy: Default
+      decodingStrategy: None
+      key: db/credentials
+      property: DB_USER
+    secretKey: username
+  - remoteRef:
+      conversionStrategy: Default
+      decodingStrategy: None
+      key: db/credentials
+      property: DB_PASSWORD
+    secretKey: password
+  refreshInterval: 15s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    name: db-credentials-keys
+status:
+  binding:
+    name: db-credentials-keys
+  conditions:
+  - lastTransitionTime: "2023-05-28T07:12:02Z"
+    message: Secret was synced
+    reason: SecretSynced
+    status: "True"
+    type: Ready
+  refreshTime: "2023-05-28T07:14:02Z"
+  syncedResourceVersion: 1-c100a821777c5cbaaf267f4752f4880c
+  
+$ kubectl get secrets
+NAME                  TYPE     DATA   AGE
+db-credentials-keys   Opaque   2      46m
+vault-token           Opaque   1      93m
+$ kubectl describe secret db-credentials-keys
+Name:         db-credentials-keys
+Namespace:    default
+Labels:       <none>
+Annotations:  reconcile.external-secrets.io/data-hash: cc135566e5b31239742180ed7abb33ed
+
+Type:  Opaque
+
+Data
+====
+password:  9 bytes
+username:  5 bytes
+
+### Consuming Secret in Pod
+
+$ kubectl apply -f external-secrets-demo-pod.yaml
+$ kubectl exec -it busybox -- sh
+/ # echo $DB_USER
+davar
+/ # echo $DB_PASSWORD
+qwerty123
+/ # exit
+
+
+```
+
+
+
 ### Conclusion: 
 Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. Above, we looked at two ways to do this – manually and in an automated fashion. In both cases, an init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
 
