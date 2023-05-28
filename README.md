@@ -403,7 +403,7 @@ qwerty123
 
 
 ```
-
+Ref: https://www.kubecost.com/kubernetes-devops-tools/kubernetes-external-secrets/
 
 
 ### Conclusion: 
