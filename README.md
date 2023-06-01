@@ -405,7 +405,7 @@ qwerty123
 ```
 - Ref1: https://www.kubecost.com/kubernetes-devops-tools/kubernetes-external-secrets/
 - Ref2: https://www.digitalocean.com/community/tutorials/how-to-access-vault-secrets-inside-of-kubernetes-using-external-secrets-operator-eso
-- Ref3(ArgoCD): https://argocd-vault-plugin.readthedocs.io/en/stable/usage/ && https://luafanti.medium.com/injecting-secrets-from-vault-into-helm-charts-with-argocd-43fc1df57e74 && https://colinwilson.uk/2022/08/22/secrets-management-with-external-secrets-argo-cd-and-gitops/
+- Ref3(ArgoCD): https://argocd-vault-plugin.readthedocs.io/en/stable/usage/ && https://luafanti.medium.com/injecting-secrets-from-vault-into-helm-charts-with-argocd-43fc1df57e74 && https://colinwilson.uk/2022/08/22/secrets-management-with-external-secrets-argo-cd-and-gitops/ && https://colinwilson.uk/2022/08/22/secrets-management-with-external-secrets-argo-cd-and-gitops/
 - https://akuity.io/blog/how-to-manage-kubernetes-secrets-gitops/ : We strongly advise you to use the External Secrets method, because this method is Kubernetes-native, secrets management agnostic, and rapidly being adopted by the community which means it will have continued support.
 
 ### Conclusion: 
