@@ -405,8 +405,8 @@ qwerty123
 ```
 - Ref1: https://www.kubecost.com/kubernetes-devops-tools/kubernetes-external-secrets/
 - Ref2: https://www.digitalocean.com/community/tutorials/how-to-access-vault-secrets-inside-of-kubernetes-using-external-secrets-operator-eso
-- Ref3(ArgoCD): https://argocd-vault-plugin.readthedocs.io/en/stable/usage/ && https://luafanti.medium.com/injecting-secrets-from-vault-into-helm-charts-with-argocd-43fc1df57e74 && https://colinwilson.uk/2022/08/22/secrets-management-with-external-secrets-argo-cd-and-gitops/ && https://colinwilson.uk/2022/08/22/secrets-management-with-external-secrets-argo-cd-and-gitops/
-- https://akuity.io/blog/how-to-manage-kubernetes-secrets-gitops/ : We strongly advise you to use the External Secrets method, because this method is Kubernetes-native, secrets management agnostic, and rapidly being adopted by the community which means it will have continued support.
+- Ref3 (ArgoCD): https://argocd-vault-plugin.readthedocs.io/en/stable/usage/ && https://luafanti.medium.com/injecting-secrets-from-vault-into-helm-charts-with-argocd-43fc1df57e74 && https://colinwilson.uk/2022/08/22/secrets-management-with-external-secrets-argo-cd-and-gitops/ 
+- https://akuity.io/blog/how-to-manage-kubernetes-secrets-gitops/ -> Note: We strongly advise you to use the External Secrets method, because this method is Kubernetes-native, secrets management agnostic, and rapidly being adopted by the community which means it will have continued support.
 
 ### Conclusion: 
 Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. Above, we looked at two ways to do this – manually and in an automated fashion. In both cases, an init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
