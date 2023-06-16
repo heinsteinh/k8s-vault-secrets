@@ -1,6 +1,20 @@
 
 ## Passing Secrets: Using Vault with Kubernetes
 
+What solutions for managing secrets are out there  (How to manage Kubernetes secrets with GitOps)?
+
+- Sealed Secrets
+- Argo CD Vault Plugin
+- SOPS (Secrets OPerationS)
+- Vault Agent
+- Secrets Store CSI Driver
+- External Secrets
+- etc.
+
+Note: If you don’t have time to research the solutions, then we suggest External Secrets because it covers most of the use cases. 
+
+In this repo demo Vault Agent & External Secrets + HashiCorp Vault
+
 ### k8s:KIND local environment
 
 <img src="./KIND-diagram.png?raw=true" width="800">
