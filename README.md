@@ -422,6 +422,8 @@ qwerty123
 - Ref3 (ArgoCD): https://argocd-vault-plugin.readthedocs.io/en/stable/usage/ && https://luafanti.medium.com/injecting-secrets-from-vault-into-helm-charts-with-argocd-43fc1df57e74 && https://colinwilson.uk/2022/08/22/secrets-management-with-external-secrets-argo-cd-and-gitops/ 
 - https://akuity.io/blog/how-to-manage-kubernetes-secrets-gitops/ -> Note: We strongly advise you to use the External Secrets method, because this method is Kubernetes-native, secrets management agnostic, and rapidly being adopted by the community which means it will have continued support.
 
+REF (GitOps) : https://github.com/adavarski/k8s-vault-auth-go -> terraform for vault in-cluster (k8s) instalation & secrets managemant example  
+
 ### Conclusion: 
 Vault can be used to securely inject secrets like database credentials into running Pods in Kubernetes so that your application can access them. Above, we looked at two ways to do this – manually and in an automated fashion. In both cases, an init container spins up a Vault Agent that authenticates with Vault, gets the secrets, and writes them to a local storage volume that your application can access during runtime.
 
