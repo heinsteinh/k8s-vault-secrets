@@ -21,7 +21,7 @@ spec:
   containers:
     # Vault container
     - name: vault-agent-auth
-      image: vault
+      image:  hashicorp/vault
       volumeMounts:
         - name: config
           mountPath: /etc/vault
@@ -33,7 +33,7 @@ spec:
       # To access services in two different namespaces you can use url like this: HTTP://<your-service-name>.<namespace-with-that-service>.svc.cluster.local
       env:
         - name: VAULT_ADDR
-          value: http://vault-internal.vault.svc.cluster.local:8200
+          value: http://vault-internal.vault.svc.k8s-prod.lab:8200
       # Run the Vault agent
       args:
         [
